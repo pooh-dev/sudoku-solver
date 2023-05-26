@@ -1,4 +1,4 @@
-﻿namespace SudokuSolver.domain;
+﻿namespace SudokuSolver.Domain;
 
 public class Cell
 {
@@ -8,22 +8,24 @@ public class Cell
     public int Column { get; set; }
     public int Block { get; set; }
 
-    public Cell(int row, int column)
+    public Cell(int row, int col)
     {
         Value = 0;
         PossibleValues = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         Row = row;
-        Column = column;
-
+        Column = col;
+        // only the integer part of the number is needed
+        Block = 3 * (row / 3) + (col / 3);
     }
 
     public void SetValue(int value)
     {
-        if (Value < 1 || Value > 9) 
-        {
-            throw new ArgumentException($"The value: {value} is incorrect. Must be between 1 and 9.");
-        }
+        Value = value;
+        PossibleValues.Clear();
     }
 
+    public void RemoveFromPossibleValues(int value)
+    {
+        PossibleValues.Remove(value);
+    }
 }
-
