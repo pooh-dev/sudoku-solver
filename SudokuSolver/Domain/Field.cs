@@ -57,10 +57,7 @@ public class Field
         {
             for (int col = 0; col < 9; col++)
             {
-                var cell = _cells
-                    .Where(c => c.Row == row && c.Column == col)
-                    .FirstOrDefault();
-                sb.Append(cell);
+                sb.Append(GetCell(row, col));
             }
             sb.Append("\n\n");
         }
