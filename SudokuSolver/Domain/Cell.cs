@@ -20,8 +20,16 @@ public class Cell
 
     public void SetValue(int value)
     {
-        Value = value;
-        _possibleValues.Clear();
+        if (value < 0 || value > 9) 
+        {
+            throw new ArgumentOutOfRangeException($"The value must be between 0 and 9, but was {value}");
+        }
+
+        if (value > 0)
+        {
+            Value = value;
+            _possibleValues.Clear();
+        }
     }
 
     public void RemoveFromPossibleValues(int value) => _possibleValues.Remove(value);
@@ -30,7 +38,7 @@ public class Cell
 
     public override string? ToString()
     {
-        return $"({Row},{Column},{Block})=>{Value} ";
+        return $"({Row},{Column},{Block})=>{Value} [{string.Join(',', _possibleValues)}] ";
     }
 
     public override bool Equals(object? obj)
