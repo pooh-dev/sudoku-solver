@@ -4,7 +4,7 @@ namespace SudokuSolver.Domain;
 
 public class Field
 {
-    private readonly HashSet<Cell> _cells;
+    public HashSet<Cell> Cells { get; }
     private readonly List<Func<Cell, Cell, bool>> _relatedCellsPredicates = new() 
     {
         (c1, c2) => c1.Row == c2.Row,
@@ -14,12 +14,12 @@ public class Field
 
     public Field()
     {
-        _cells = new();
+        Cells = new();
         for (int row = 0; row < 9; row++)
         {
             for (int col = 0; col < 9; col++)
             {
-                _cells.Add(new(row, col));
+                Cells.Add(new(row, col));
             }
         }
     }
@@ -53,7 +53,7 @@ public class Field
 
     public Cell GetCell(int row, int col)
     {
-        return _cells
+        return Cells
             .Where(c => c.Row == row && c.Column == col)
             .FirstOrDefault()
             ?? throw new ArgumentNullException($"There is no Cell({row},{col}");
@@ -76,7 +76,7 @@ public class Field
     private void RemovePossibleValuesFromRelatedCells(Cell cell)
     {
         _relatedCellsPredicates.ForEach(rcp => 
-            _cells.Where(rc => rcp(rc, cell))
+            Cells.Where(rc => rcp(rc, cell))
                   .ToList()
                   .ForEach(c => c.RemoveFromPossibleValues(cell.Value)));
     }

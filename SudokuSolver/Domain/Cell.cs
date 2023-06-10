@@ -6,7 +6,7 @@ public class Cell
     public int Row { get; }
     public int Column { get; }
     public int Block { get; }
-    private readonly HashSet<int> _possibleValues;
+    public HashSet<int> PossibleValues { get; }
 
     public Cell(int row, int col)
     {
@@ -15,22 +15,22 @@ public class Cell
         Column = col;
         // only the integer part of the number is needed
         Block = 3 * (row / 3) + (col / 3);
-        _possibleValues = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        PossibleValues = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     }
 
     public void SetValue(int value)
     {
         Value = value;
-        _possibleValues.Clear();
+        PossibleValues.Clear();
     }
 
-    public void RemoveFromPossibleValues(int value) => _possibleValues.Remove(value);
+    public void RemoveFromPossibleValues(int value) => PossibleValues.Remove(value);
 
     public bool IsOpened() => Value > 0;
 
     public override string? ToString()
     {
-        return $"({Row},{Column},{Block})=>{Value} [{string.Join(',', _possibleValues)}] ";
+        return $"({Row},{Column},{Block})=>{Value} [{string.Join(',', PossibleValues)}] ";
     }
 
     public override bool Equals(object? obj)
