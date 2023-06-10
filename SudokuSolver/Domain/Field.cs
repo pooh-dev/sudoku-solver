@@ -35,9 +35,18 @@ public class Field
             
             for (int col = 0; col < 9; col++)
             {
-                var cell = GetCell(row, col);
-                cell.SetValue(rowValues[col]);
-                RemovePossibleValuesFromRelatedCells(cell);
+                var initValue = rowValues[col];
+                if (initValue < 0 || initValue > 9)
+                {
+                    throw new ArgumentOutOfRangeException($"The value must be between 0 and 9, but was {initValue}");
+                }
+
+                if (initValue > 0)
+                {
+                    var cell = GetCell(row, col);
+                    cell.SetValue(initValue);
+                    RemovePossibleValuesFromRelatedCells(cell);
+                }
             }
         }
     }

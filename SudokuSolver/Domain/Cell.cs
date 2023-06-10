@@ -10,26 +10,18 @@ public class Cell
 
     public Cell(int row, int col)
     {
-        Value = 0;
-        _possibleValues = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        Value = 0;        
         Row = row;
         Column = col;
         // only the integer part of the number is needed
         Block = 3 * (row / 3) + (col / 3);
+        _possibleValues = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     }
 
     public void SetValue(int value)
     {
-        if (value < 0 || value > 9) 
-        {
-            throw new ArgumentOutOfRangeException($"The value must be between 0 and 9, but was {value}");
-        }
-
-        if (value > 0)
-        {
-            Value = value;
-            _possibleValues.Clear();
-        }
+        Value = value;
+        _possibleValues.Clear();
     }
 
     public void RemoveFromPossibleValues(int value) => _possibleValues.Remove(value);
