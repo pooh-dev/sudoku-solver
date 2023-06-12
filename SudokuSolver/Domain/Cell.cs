@@ -26,6 +26,12 @@ public class Cell
 
     public void SetValue(int value)
     {
+        if (IsOpened())
+        {
+            throw new ArgumentException($"The Cell({Row},{Column}) has alredy opened and has a value: {Value}. " +
+                $"Trying to set another value: {value}.");
+        }
+
         Value = value;
         PossibleValues.Clear();
     }

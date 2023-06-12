@@ -16,38 +16,11 @@ public class Field
     public Field()
     {
         Cells = new();
-        for (int row = 0; row < 9; row++)
-        {
-            for (int col = 0; col < 9; col++)
-            {
-                Cells.Add(new(row, col));
-            }
-        }
-    }
-
-    public void Init(List<string> rows)
-    {
         foreach (var row in Range(0, 9))
         {
-            var rowValues = rows[row]
-                .Split(',')
-                .Select(int.Parse)
-                .ToList();
-            
             foreach (var col in Range(0, 9))
             {
-                var initValue = rowValues[col];
-                if (initValue < 0 || initValue > 9)
-                {
-                    throw new ArgumentOutOfRangeException($"The value must be between 0 and 9, but was {initValue}");
-                }
-
-                if (initValue > 0)
-                {
-                    var cell = GetCell(row, col);
-                    cell.SetValue(initValue);
-                    RemovePossibleValuesFromRelatedCells(cell);
-                }
+                Cells.Add(new(row, col));
             }
         }
     }
@@ -57,7 +30,23 @@ public class Field
         return Cells
             .Where(c => c.Row == row && c.Column == col)
             .FirstOrDefault()
-            ?? throw new ArgumentNullException($"There is no Cell({row},{col}");
+            ?? throw new ArgumentNullException($"There is no Cell({row},{col})");
+    }
+
+    public void SetCellValue(int row, int column, int value)
+    {
+        SetCellValue(GetCell(row, column), value);
+    }
+
+    public void SetCellValue(Cell cell, int value)
+    {
+        cell.SetValue(value);
+
+        // remove a possible value from the related cells
+        _relatedCellsPredicates.ForEach(
+            rcp => Cells.Where(rc => rcp(rc, cell))
+                        .ToList()
+                        .ForEach(cell => cell.RemoveFromPossibleValues(value)));
     }
 
     public override string? ToString()
@@ -72,13 +61,5 @@ public class Field
             sb.Append("\n\n");
         }
         return sb.ToString();
-    }
-
-    private void RemovePossibleValuesFromRelatedCells(Cell cell)
-    {
-        _relatedCellsPredicates.ForEach(rcp => 
-            Cells.Where(rc => rcp(rc, cell))
-                  .ToList()
-                  .ForEach(c => c.RemoveFromPossibleValues(cell.Value)));
     }
 }
