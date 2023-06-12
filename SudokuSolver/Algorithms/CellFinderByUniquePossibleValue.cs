@@ -1,29 +1,39 @@
 ﻿using SudokuSolver.Domain;
+using static System.Linq.Enumerable;
 
 namespace SudokuSolver.Algorithms;
 
 public class CellFinderByUniquePossibleValue : ICellFinder
 {
-    public (Cell?, int) Find(HashSet<Cell> cells)
+    private readonly List<Func<Cell, int, bool>> _selectedCellsPredicates = new()
     {
-        for (int i = 0; i < 9; i++)
+        (cell, rowIndex)    => !cell.IsOpened() && cell.Row == rowIndex,
+        (cell, columnIndex) => !cell.IsOpened() && cell.Column == columnIndex,
+        (cell, blockIndex)  => !cell.IsOpened() && cell.Block == blockIndex
+    };
+
+    public CellFinderResult Find(HashSet<Cell> cells)
+    {
+        foreach (var idx in Range(0, 9))
         {
-            FindInSetCells(cell => !cell.IsOpened() && cell.Row == i, cells);
-            FindInSetCells(cell => !cell.IsOpened() && cell.Column == i, cells);
-            FindInSetCells(cell => !cell.IsOpened() && cell.Block == i, cells);
-
-            // TODO: Finish this algorithm
-
+            foreach (var scp in _selectedCellsPredicates)
+            {
+                var cellFinderResult = FindInSelectedCells(cells.Where(cell => scp(cell, idx)));
+                if (cellFinderResult.IsSuccess())
+                {
+                    return cellFinderResult;
+                }
+            }
         }
 
-        throw new NotImplementedException();
+        return CellFinderResult.NotFound();
     }
 
-    private (Cell?, int) FindInSetCells(Func<Cell, bool> selectedCells, HashSet<Cell> cells)
+    private CellFinderResult FindInSelectedCells(IEnumerable<Cell> selectedCells)
     {
         var possibleValuesDictionary = new Dictionary<int, HashSet<Cell>>();
 
-        foreach (var cell in cells.Where(selectedCells))
+        foreach (var cell in selectedCells)
         {
             foreach (var possibleValue in cell.PossibleValues)
             {
@@ -43,7 +53,7 @@ public class CellFinderByUniquePossibleValue : ICellFinder
             .FirstOrDefault();
 
         return uniquePossibleValue.Equals(default(KeyValuePair<int, HashSet<Cell>>))
-            ? (null, 0)
-            : (uniquePossibleValue.Value.First(), uniquePossibleValue.Key);
+            ? CellFinderResult.NotFound()
+            : CellFinderResult.Success(uniquePossibleValue.Value.First(), uniquePossibleValue.Key);
     }
 }

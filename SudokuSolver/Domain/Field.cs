@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using static System.Linq.Enumerable;
 
 namespace SudokuSolver.Domain;
 
@@ -26,14 +27,14 @@ public class Field
 
     public void Init(List<string> rows)
     {
-        for (int row = 0; row < 9; row++) 
+        foreach (var row in Range(0, 9))
         {
             var rowValues = rows[row]
                 .Split(',')
                 .Select(int.Parse)
                 .ToList();
             
-            for (int col = 0; col < 9; col++)
+            foreach (var col in Range(0, 9))
             {
                 var initValue = rowValues[col];
                 if (initValue < 0 || initValue > 9)
@@ -62,9 +63,9 @@ public class Field
     public override string? ToString()
     {
         StringBuilder sb = new();
-        for (int row = 0; row < 9; row++)
+        foreach (var row in Range(0, 9))
         {
-            for (int col = 0; col < 9; col++)
+            foreach (var col in Range(0, 9))
             {
                 sb.Append(GetCell(row, col));
             }

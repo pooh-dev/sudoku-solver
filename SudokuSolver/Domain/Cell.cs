@@ -1,10 +1,16 @@
-﻿namespace SudokuSolver.Domain;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SudokuSolver.Domain;
 
 public class Cell
 {
+    [Range(1, 9)]
     public int Value { get; set; }
+    [Range(0, 8)]
     public int Row { get; }
+    [Range(0, 8)]
     public int Column { get; }
+    [Range(0, 8)]
     public int Block { get; }
     public HashSet<int> PossibleValues { get; }
 
