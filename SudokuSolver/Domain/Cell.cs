@@ -36,7 +36,17 @@ public class Cell
         PossibleValues.Clear();
     }
 
-    public void RemoveFromPossibleValues(int value) => PossibleValues.Remove(value);
+    public void RemoveFromPossibleValues(int value)
+    {
+        PossibleValues.Remove(value);
+
+        if (PossibleValues.Count == 0 && !IsOpened())
+        {
+            throw new ArgumentException(
+                $"The Cell({Row},{Column}) has NO possible values but still has not opened. " +
+                $"The last removed possible value: {value}.");
+        }
+    }
 
     public bool IsOpened() => Value > 0;
 

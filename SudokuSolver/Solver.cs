@@ -1,39 +1,19 @@
-﻿using SudokuSolver.Domain;
-using static System.Linq.Enumerable;
+﻿using SudokuSolver.Algorithms;
+using SudokuSolver.Domain;
 
 namespace SudokuSolver;
 
 public class Solver
 {
-    public Field Field { get; }
-
-    public Solver()
+    private readonly Field _field;
+    private readonly List<ICellFinder> _cellFinderAlgorithms = new()
     {
-        Field = new Field();
-    }
+        new CellFinderBySinglePossibleValue(),
+        new CellFinderByUniquePossibleValue()
+    };
 
-    public void InitField(List<string> rows)
+    public Solver(Field field)
     {
-        foreach (var row in Range(0, 9))
-        {
-            var rowValues = rows[row]
-                .Split(',')
-                .Select(int.Parse)
-                .ToList();
-
-            foreach (var col in Range(0, 9))
-            {
-                var initValue = rowValues[col];
-                if (initValue < 0 || initValue > 9)
-                {
-                    throw new ArgumentOutOfRangeException($"The value must be between 0 and 9, but was {initValue}");
-                }
-
-                if (initValue > 0)
-                {
-                    Field.SetCellValue(row, col, initValue);
-                }
-            }
-        }
+        _field = field;
     }
 }
