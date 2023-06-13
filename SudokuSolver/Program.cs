@@ -15,11 +15,12 @@ List<string> initialValues = new()
     "9,0,0,5,6,0,3,1,0"
 };
 
-Field field = new();
-field.Init(initialValues);
+Field inputField = new();
+inputField.Init(initialValues);
 
-Solver solver = new(field);
+Solver solver = new();
+var outputField = solver.Solve(inputField);
 
-Console.WriteLine(field);
+Console.WriteLine(outputField);
 
 Console.Read();

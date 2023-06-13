@@ -19,14 +19,14 @@ public class CellFinderByUniquePossibleValue : ICellFinder
             foreach (var scp in _selectedCellsPredicates)
             {
                 var cellFinderResult = FindInSelectedCells(cells.Where(cell => scp(cell, idx)));
-                if (cellFinderResult.IsSuccess())
+                if (cellFinderResult.IsCellFound())
                 {
                     return cellFinderResult;
                 }
             }
         }
 
-        return CellFinderResult.NotFound();
+        return CellFinderResult.CellNotFound();
     }
 
     private CellFinderResult FindInSelectedCells(IEnumerable<Cell> selectedCells)
@@ -53,7 +53,7 @@ public class CellFinderByUniquePossibleValue : ICellFinder
             .FirstOrDefault();
 
         return uniquePossibleValue.Equals(default(KeyValuePair<int, HashSet<Cell>>))
-            ? CellFinderResult.NotFound()
-            : CellFinderResult.Success(uniquePossibleValue.Value.First(), uniquePossibleValue.Key);
+            ? CellFinderResult.CellNotFound()
+            : CellFinderResult.CellFound(uniquePossibleValue.Value.First(), uniquePossibleValue.Key);
     }
 }

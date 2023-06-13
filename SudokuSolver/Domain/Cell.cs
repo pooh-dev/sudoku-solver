@@ -52,7 +52,8 @@ public class Cell
 
     public override string? ToString()
     {
-        return $"({Row},{Column},{Block})=>{Value} [{string.Join(',', PossibleValues)}] ";
+        //return $"({Row},{Column},{Block})=>{Value} [{string.Join(',', PossibleValues)}] ";
+        return $"{Value}   ";
     }
 
     public override bool Equals(object? obj)

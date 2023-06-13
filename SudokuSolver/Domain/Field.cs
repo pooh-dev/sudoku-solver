@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using SudokuSolver.Algorithms;
+using System.Text;
 using static System.Linq.Enumerable;
 
 namespace SudokuSolver.Domain;
@@ -69,6 +70,11 @@ public class Field
         SetCellValue(GetCell(row, column), value);
     }
 
+    public void SetCellValue(CellFinderResult cellFinderResult)
+    {
+        SetCellValue(cellFinderResult.Cell, cellFinderResult.Value);
+    }
+
     public void SetCellValue(Cell cell, int value)
     {
         cell.SetValue(value);
@@ -80,7 +86,7 @@ public class Field
                         .ForEach(cell => cell.RemoveFromPossibleValues(value)));
     }
 
-    public bool IsSolved()
+    public bool AreAllCellsOpen()
     {
         foreach (var idx in Range(0, 9))
         {

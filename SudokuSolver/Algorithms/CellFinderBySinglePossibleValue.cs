@@ -11,7 +11,7 @@ public class CellFinderBySinglePossibleValue : ICellFinder
             .FirstOrDefault();
 
         return cell is null
-            ? CellFinderResult.NotFound()
-            : CellFinderResult.Success(cell, cell.PossibleValues.First());
+            ? CellFinderResult.CellNotFound()
+            : CellFinderResult.CellFound(cell, cell.PossibleValues.First());
     }
 }
