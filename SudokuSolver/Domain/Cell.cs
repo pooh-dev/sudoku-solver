@@ -7,12 +7,14 @@ public class Cell
     [Range(1, 9)]
     public int Value { get; set; }
     [Range(0, 8)]
-    public int Row { get; }
+    public int Row { get; set; }
     [Range(0, 8)]
-    public int Column { get; }
+    public int Column { get; set; }
     [Range(0, 8)]
-    public int Block { get; }
-    public HashSet<int> PossibleValues { get; }
+    public int Block { get; set; }
+    public HashSet<int> PossibleValues { get; set; }
+
+    public Cell() { }
 
     public Cell(int row, int col)
     {
@@ -50,10 +52,22 @@ public class Cell
 
     public bool IsOpened() => Value > 0;
 
+    public Cell Copy()
+    {
+        return new()
+        {
+            Value = Value,
+            Row = Row,
+            Column = Column,
+            Block = Block,
+            PossibleValues = new(PossibleValues)
+        };
+    }
+
     public override string? ToString()
     {
-        //return $"({Row},{Column},{Block})=>{Value} [{string.Join(',', PossibleValues)}] ";
-        return $"{Value}   ";
+        return $"({Row},{Column},{Block})=>{Value} [{string.Join(',', PossibleValues)}] ";
+        //return $"{Value}   ";
     }
 
     public override bool Equals(object? obj)

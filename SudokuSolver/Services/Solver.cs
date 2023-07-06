@@ -37,7 +37,7 @@ public class Solver
 
                 // solution is not found
                 // TODO: add logic to suggest a possible solution 
-                
+                return field;                
             }
         }
 

@@ -23,6 +23,10 @@ public class Field
     public Field()
     {
         Cells = new();
+    }
+
+    public void Init(List<string> rows)
+    {
         foreach (var row in Range(0, 9))
         {
             foreach (var col in Range(0, 9))
@@ -30,10 +34,7 @@ public class Field
                 Cells.Add(new(row, col));
             }
         }
-    }
 
-    public void Init(List<string> rows)
-    {
         foreach (var row in Range(0, 9))
         {
             var rowValues = rows[row]
@@ -105,6 +106,18 @@ public class Field
             }
         }
         return true;
+    }
+
+    public Field Copy()
+    {
+        Field newField = new();
+
+        foreach (var cell in Cells)
+        {
+            newField.Cells.Add(cell.Copy());
+        }
+
+        return newField;
     }
 
     public override string? ToString()
