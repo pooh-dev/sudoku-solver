@@ -1,6 +1,5 @@
-﻿
-using SudokuSolver;
-using SudokuSolver.Domain;
+﻿using SudokuSolver.Domain;
+using SudokuSolver.Services;
 
 List<string> initialValues = new()
 {
@@ -19,7 +18,8 @@ Field inputField = new();
 inputField.Init(initialValues);
 
 Solver solver = new();
-var outputField = solver.Solve(inputField);
+await solver.AddForSolving(inputField);
+var outputField = await solver.Solve();
 
 Console.WriteLine(outputField);
 
