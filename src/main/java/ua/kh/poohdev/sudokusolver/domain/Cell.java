@@ -1,9 +1,10 @@
-package ua.kh.poohdev.domain;
+package ua.kh.poohdev.sudokusolver.domain;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Cell {
 
@@ -56,6 +57,24 @@ public class Cell {
             throw new IllegalArgumentException(
                 String.format(REMOVE_POSSIBLE_VALUE_ERROR_MSG, rowNumber, colNumber, value));
         }
+    }
+
+    public int getRowNumber() {
+        return rowNumber;
+    }
+
+    public int getColNumber() {
+        return colNumber;
+    }
+
+    public int getBlockNumber() {
+        return blockNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + rowNumber + "," + colNumber + "," + blockNumber + ") => " + value +
+               " [" + possibleValues.stream().map(Object::toString).collect(Collectors.joining(",")) + "]";
     }
 
     @Override
