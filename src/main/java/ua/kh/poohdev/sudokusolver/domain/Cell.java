@@ -71,6 +71,10 @@ public class Cell {
         return blockNumber;
     }
 
+    public Set<Integer> getPossibleValues() {
+        return possibleValues;
+    }
+
     @Override
     public String toString() {
         return "(" + rowNumber + "," + colNumber + "," + blockNumber + ") => " + value +
