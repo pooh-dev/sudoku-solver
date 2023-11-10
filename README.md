@@ -1,2 +1,2 @@
 # sudoku-solver
-App to solve a classical sudoku puzzle
+App to solve a classic sudoku puzzle
