@@ -22,8 +22,10 @@ public class Main {
     public static void main(String[] args) {
         var field = new Field();
         field.init(SIMPLE_PUZZLE);
+
+        var solver = new Solver();
+        solver.solve(field);
+
         System.out.println(field);
     }
-
-
 }

@@ -11,26 +11,24 @@ public class Field {
     private static final String INCORRECT_INIT_VALUE_ERROR_MSG = "The init value must be between 0 and 9, but was %d.";
     private static final String CELL_NOT_FOUND_ERROR_MSG = "There is no Cell with row = %d and col = %d.";
 
-    private static final List<BiPredicate<Cell, Cell>> RELATED_CELLS_PREDICATES = Arrays.asList(
-            (c1, c2) -> c1.getColNumber() == c2.getColNumber(),
-            (c1, c2) -> c1.getRowNumber() == c2.getRowNumber(),
-            (c1, c2) -> c1.getBlockNumber() == c2.getBlockNumber()
-    );
+    private static final BiPredicate<Cell, Cell> RELATED_CELLS_PREDICATE = (c1, c2) ->
+            c1.getColNumber() == c2.getColNumber() ||
+            c1.getRowNumber() == c2.getRowNumber() ||
+            c1.getBlockNumber() == c2.getBlockNumber();
 
     private final Set<Cell> cells;
 
     public Field() {
         cells = new HashSet<>();
-    }
-
-    public void init(List<String> initRows) {
 
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 cells.add(new Cell(row, col));
             }
         }
+    }
 
+    public void init(List<String> initRows) {
         for (int row = 0; row < 9; row++) {
             List<Integer> rowValues = Arrays.stream(initRows.get(row).split(","))
                     .map(String::strip)
@@ -48,6 +46,17 @@ public class Field {
                 }
             }
         }
+    }
+
+    public void setCellValue(Cell cell, int value) {
+        cell.setValue(value);
+        cells.stream()
+                .filter(relatedCell -> RELATED_CELLS_PREDICATE.test(relatedCell, cell))
+                .forEach(relatedCell -> relatedCell.removePossibleValue(value));
+    }
+
+    public Set<Cell> getCells() {
+        return cells;
     }
 
     @Override
@@ -69,15 +78,5 @@ public class Field {
                 .filter(cell -> cell.getColNumber() == col)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(String.format(CELL_NOT_FOUND_ERROR_MSG, row, col)));
-    }
-
-    private void setCellValue(Cell cell, int value) {
-        RELATED_CELLS_PREDICATES.forEach(rcp ->
-            cells.stream()
-                    .filter(relatedCell -> rcp.test(relatedCell, cell))
-                    .forEach(relatedCell -> relatedCell.removePossibleValue(value))
-        );
-
-        cell.setValue(value);
     }
 }

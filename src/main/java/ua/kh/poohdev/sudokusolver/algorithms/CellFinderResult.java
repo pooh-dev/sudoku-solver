@@ -12,15 +12,23 @@ public class CellFinderResult {
         this.value = value;
     }
 
-    public boolean isCellFound() {
-        return cell != null && value != 0;
-    }
-
     public static CellFinderResult notFound() {
         return new CellFinderResult(null, 0);
     }
 
     public static CellFinderResult found(Cell cell, int value) {
         return new CellFinderResult(cell, value);
+    }
+
+    public boolean isCellFound() {
+        return cell != null && value != 0;
+    }
+
+    public Cell getCell() {
+        return cell;
+    }
+
+    public int getValue() {
+        return value;
     }
 }
