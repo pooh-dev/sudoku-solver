@@ -3,29 +3,22 @@ package ua.kh.poohdev.sudokusolver;
 import ua.kh.poohdev.sudokusolver.algorithms.CellFinder;
 import ua.kh.poohdev.sudokusolver.algorithms.CellFinderBySinglePossibleValue;
 import ua.kh.poohdev.sudokusolver.algorithms.CellFinderByUniquePossibleValue;
-import ua.kh.poohdev.sudokusolver.domain.Cell;
 import ua.kh.poohdev.sudokusolver.domain.Field;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiPredicate;
+
+import static ua.kh.poohdev.sudokusolver.constants.SudokuSolverConstants.CELLS_IN_UNIT_PREDICATES;
+import static ua.kh.poohdev.sudokusolver.constants.SudokuSolverConstants.UNIT_INDEXES;
 
 public class Solver {
-
-    private static final int[] UNIT_INDEXES = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-
-    private static final List<BiPredicate<Cell, Integer>> CELLS_IN_UNIT_PREDICATES = Arrays.asList(
-            (cell, colNumber) -> cell.getColNumber() == colNumber,
-            (cell, rowNumber) -> cell.getRowNumber() == rowNumber,
-            (cell, blockNumber) -> cell.getBlockNumber() == blockNumber
-    );
 
     private static final List<CellFinder> CELL_FINDERS = Arrays.asList(
             new CellFinderBySinglePossibleValue(),
             new CellFinderByUniquePossibleValue()
     );
 
-    public void solve(Field field) {
+    public Field solve(Field field) {
         boolean isAnyCellFound;
         do {
             isAnyCellFound = false;
@@ -47,5 +40,14 @@ public class Solver {
                 }
             }
         } while (isAnyCellFound);
+
+        if (field.isOpened()) {
+            return field;
+        }
+
+        // solution is not found
+        // TODO: add logic to suggest a possible solution
+        var newField = field.copy();
+        return newField;
     }
 }

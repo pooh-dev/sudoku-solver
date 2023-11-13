@@ -1,10 +1,11 @@
 package ua.kh.poohdev.sudokusolver.domain;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static ua.kh.poohdev.sudokusolver.constants.SudokuSolverConstants.REQUIRED_VALUES;
 
 public class Cell {
 
@@ -30,7 +31,7 @@ public class Cell {
         blockNumber = 3 * (row / 3) + (col / 3);
 
         possibleValues = new HashSet<>();
-        possibleValues.addAll(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        possibleValues.addAll(REQUIRED_VALUES);
 
         value = 0;
     }
@@ -73,6 +74,10 @@ public class Cell {
 
     public Set<Integer> getPossibleValues() {
         return possibleValues;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     @Override

@@ -19,13 +19,25 @@ public class Main {
             "9,0,0,5,6,0,3,1,0"
     );
 
+    private static final List<String> DIFFICULT_PUZZLE = Arrays.asList(
+            "0,9,0,7,8,5,0,1,0",
+            "0,0,0,4,0,0,6,0,0",
+            "0,0,0,0,0,0,0,0,0",
+            "0,3,0,0,0,0,0,0,0",
+            "9,0,0,0,2,0,0,0,4",
+            "0,0,0,0,0,0,0,5,0",
+            "0,0,0,0,0,0,0,0,0",
+            "0,0,9,0,0,8,0,0,0",
+            "0,4,0,3,6,1,0,7,0"
+    );
+
     public static void main(String[] args) {
         var field = new Field();
-        field.init(SIMPLE_PUZZLE);
+        field.init(DIFFICULT_PUZZLE);
 
         var solver = new Solver();
-        solver.solve(field);
+        var result = solver.solve(field);
 
-        System.out.println(field);
+        System.out.println(result);
     }
 }

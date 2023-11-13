@@ -4,38 +4,34 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiPredicate;
+
+import static ua.kh.poohdev.sudokusolver.constants.SudokuSolverConstants.OPENED_CELLS_PREDICATES;
+import static ua.kh.poohdev.sudokusolver.constants.SudokuSolverConstants.RELATED_CELLS_PREDICATE;
+import static ua.kh.poohdev.sudokusolver.constants.SudokuSolverConstants.REQUIRED_VALUES;
+import static ua.kh.poohdev.sudokusolver.constants.SudokuSolverConstants.UNIT_INDEXES;
 
 public class Field {
 
     private static final String INCORRECT_INIT_VALUE_ERROR_MSG = "The init value must be between 0 and 9, but was %d.";
     private static final String CELL_NOT_FOUND_ERROR_MSG = "There is no Cell with row = %d and col = %d.";
 
-    private static final BiPredicate<Cell, Cell> RELATED_CELLS_PREDICATE = (c1, c2) ->
-            c1.getColNumber() == c2.getColNumber() ||
-            c1.getRowNumber() == c2.getRowNumber() ||
-            c1.getBlockNumber() == c2.getBlockNumber();
+    private Set<Cell> cells = new HashSet<>();
 
-    private final Set<Cell> cells;
+    public void init(List<String> initRows) {
 
-    public Field() {
-        cells = new HashSet<>();
-
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
+        for (int row: UNIT_INDEXES) {
+            for (int col: UNIT_INDEXES) {
                 cells.add(new Cell(row, col));
             }
         }
-    }
 
-    public void init(List<String> initRows) {
-        for (int row = 0; row < 9; row++) {
+        for (int row: UNIT_INDEXES) {
             List<Integer> rowValues = Arrays.stream(initRows.get(row).split(","))
                     .map(String::strip)
                     .map(Integer::valueOf)
                     .toList();
 
-            for (int col = 0; col < 9; col++) {
+            for (int col: UNIT_INDEXES) {
                 var initValue = rowValues.get(col);
                 if (initValue < 0 || initValue > 9) {
                     throw new IllegalArgumentException(String.format(INCORRECT_INIT_VALUE_ERROR_MSG, initValue));
@@ -59,11 +55,41 @@ public class Field {
         return cells;
     }
 
+    public boolean isOpened() {
+        for (int unitIdx: UNIT_INDEXES) {
+            for (var openedCellsPredicate: OPENED_CELLS_PREDICATES) {
+
+                var requiredValues = new HashSet<>(REQUIRED_VALUES);
+
+                cells.stream()
+                        .filter(cell -> openedCellsPredicate.test(cell, unitIdx))
+                        .forEach(cell -> requiredValues.remove(cell.getValue()));
+
+                if (!requiredValues.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public Field copy() {
+        var field = new Field();
+        field.setCells(Set.copyOf(cells));
+
+        return field;
+    }
+
+    public void setCells(Set<Cell> cells) {
+        this.cells = cells;
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (int row = 0; row < 9; row++) {
-            for (int col = 0; col < 9; col++) {
+        for (int row: UNIT_INDEXES) {
+            for (int col: UNIT_INDEXES) {
                 result.append(getCell(row, col).toString());
                 result.append("   ");
             }
