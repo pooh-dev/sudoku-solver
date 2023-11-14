@@ -36,6 +36,14 @@ public class Cell {
         value = 0;
     }
 
+    public Cell(int rowNumber, int colNumber, int blockNumber, Set<Integer> possibleValues, int value) {
+        this.rowNumber = rowNumber;
+        this.colNumber = colNumber;
+        this.blockNumber = blockNumber;
+        this.possibleValues = possibleValues;
+        this.value = value;
+    }
+
     public boolean isOpened() {
         return value != 0;
     }
@@ -78,6 +86,10 @@ public class Cell {
 
     public int getValue() {
         return value;
+    }
+
+    public Cell copy() {
+        return new Cell(rowNumber, colNumber, blockNumber, new HashSet<>(possibleValues), value);
     }
 
     @Override

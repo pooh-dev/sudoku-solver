@@ -15,7 +15,7 @@ public class Field {
     private static final String INCORRECT_INIT_VALUE_ERROR_MSG = "The init value must be between 0 and 9, but was %d.";
     private static final String CELL_NOT_FOUND_ERROR_MSG = "There is no Cell with row = %d and col = %d.";
 
-    private Set<Cell> cells = new HashSet<>();
+    private final Set<Cell> cells = new HashSet<>();
 
     public void init(List<String> initRows) {
 
@@ -42,6 +42,14 @@ public class Field {
                 }
             }
         }
+    }
+
+    public Cell getCell(int row, int col) {
+        return cells.stream()
+                .filter(cell -> cell.getRowNumber() == row)
+                .filter(cell -> cell.getColNumber() == col)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format(CELL_NOT_FOUND_ERROR_MSG, row, col)));
     }
 
     public void setCellValue(Cell cell, int value) {
@@ -75,14 +83,12 @@ public class Field {
     }
 
     public Field copy() {
-        var field = new Field();
-        field.setCells(Set.copyOf(cells));
+        var newField = new Field();
+        cells.stream()
+                .map(Cell::copy)
+                .forEach(newCell -> newField.getCells().add(newCell));
 
-        return field;
-    }
-
-    public void setCells(Set<Cell> cells) {
-        this.cells = cells;
+        return newField;
     }
 
     @Override
@@ -96,13 +102,5 @@ public class Field {
             result.append("\n\n");
         }
         return result.toString();
-    }
-
-    private Cell getCell(int row, int col) {
-        return cells.stream()
-                .filter(cell -> cell.getRowNumber() == row)
-                .filter(cell -> cell.getColNumber() == col)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format(CELL_NOT_FOUND_ERROR_MSG, row, col)));
     }
 }

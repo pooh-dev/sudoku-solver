@@ -38,6 +38,6 @@ public class Main {
         var solver = new Solver();
         var result = solver.solve(field);
 
-        System.out.println(result);
+        result.ifPresent(System.out::println);
     }
 }
