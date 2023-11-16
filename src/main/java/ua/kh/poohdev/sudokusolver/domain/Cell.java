@@ -1,9 +1,10 @@
 package ua.kh.poohdev.sudokusolver.domain;
 
+import ua.kh.poohdev.sudokusolver.exceptions.InconsistentCellStateException;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static ua.kh.poohdev.sudokusolver.constants.SudokuSolverConstants.REQUIRED_VALUES;
 
@@ -49,9 +50,8 @@ public class Cell {
     }
 
     public void setValue(int newValue) {
-
         if (isOpened()) {
-            throw new IllegalArgumentException(
+            throw new InconsistentCellStateException(
                 String.format(OPENED_CELL_ERROR_MSG, rowNumber, colNumber, value, newValue));
         }
 
@@ -63,7 +63,7 @@ public class Cell {
         possibleValues.remove(value);
 
         if (possibleValues.isEmpty() && !isOpened()) {
-            throw new IllegalArgumentException(
+            throw new InconsistentCellStateException(
                 String.format(REMOVE_POSSIBLE_VALUE_ERROR_MSG, rowNumber, colNumber, value));
         }
     }
@@ -94,8 +94,9 @@ public class Cell {
 
     @Override
     public String toString() {
-        return "(" + rowNumber + "," + colNumber + "," + blockNumber + ") => " + value +
-               " [" + possibleValues.stream().map(Object::toString).collect(Collectors.joining(",")) + "]";
+//        return "(" + rowNumber + "," + colNumber + "," + blockNumber + ") => " + value +
+//               " [" + possibleValues.stream().map(Object::toString).collect(Collectors.joining(",")) + "]";
+        return String.valueOf(value);
     }
 
     @Override

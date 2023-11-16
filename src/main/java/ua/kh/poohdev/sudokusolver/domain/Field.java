@@ -15,7 +15,16 @@ public class Field {
     private static final String INCORRECT_INIT_VALUE_ERROR_MSG = "The init value must be between 0 and 9, but was %d.";
     private static final String CELL_NOT_FOUND_ERROR_MSG = "There is no Cell with row = %d and col = %d.";
 
-    private final Set<Cell> cells = new HashSet<>();
+    private static int quantityOfFields = 0;
+
+    private final Set<Cell> cells;
+    private boolean isCorrupted;
+
+    public Field() {
+        cells = new HashSet<>();
+        isCorrupted = false;
+        quantityOfFields++;
+    }
 
     public void init(List<String> initRows) {
 
@@ -82,6 +91,18 @@ public class Field {
         return true;
     }
 
+    public void setCorrupted() {
+        isCorrupted = true;
+    }
+
+    public boolean isNotCorrupted() {
+        return !isCorrupted;
+    }
+
+    public static int getQuantityOfFields() {
+        return quantityOfFields;
+    }
+
     public Field copy() {
         var newField = new Field();
         cells.stream()
@@ -97,9 +118,9 @@ public class Field {
         for (int row: UNIT_INDEXES) {
             for (int col: UNIT_INDEXES) {
                 result.append(getCell(row, col).toString());
-                result.append("   ");
+                result.append("  ");
             }
-            result.append("\n\n");
+            result.append("\n");
         }
         return result.toString();
     }

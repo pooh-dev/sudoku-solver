@@ -39,5 +39,7 @@ public class Main {
         var result = solver.solve(field);
 
         result.ifPresent(System.out::println);
+
+        System.out.println("[ " + Field.getQuantityOfFields() + " ] attempts were made to find a solution." );
     }
 }
